@@ -1,0 +1,10 @@
+[workspace]
+members = ["hello_bevy", "hello_world" , "my_library"]
+
+[package]
+name = "more_hands"
+version = "0.1.0"
+edition = "2024"
+
+[workspace.dependencies]
+bevy = "0.18.1"
