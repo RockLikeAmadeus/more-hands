@@ -1,5 +1,5 @@
 [workspace]
-members = ["hello_bevy", "hello_world" , "my_library"]
+members = ["hello_bevy", "hello_world" , "my_library", "pig"]
 
 [package]
 name = "more_hands"
@@ -8,3 +8,4 @@ edition = "2024"
 
 [workspace.dependencies]
 bevy = "0.18.1"
+bevy_egui = "0.39.1"
