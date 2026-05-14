@@ -18,7 +18,7 @@ impl RandomNumberGenerator {
         }
     }
 
-    pub fn range(&mut self, range: Range<u32>) -> u32 {
+    pub fn u32_in_range(&mut self, range: Range<u32>) -> u32 {
         self.rng.gen_range(range)
     }
 }
@@ -38,7 +38,7 @@ mod tests {
         let mut rng = RandomNumberGenerator::new();
         for _ in 10..1000 {
             let (min, max) = (1, 10);
-            let n = rng.range(min..max);
+            let n = rng.u32_in_range(min..max);
             assert!(n >= min);
             assert!(n < max);
         }
@@ -52,8 +52,8 @@ mod tests {
         );
         (0..1000).for_each(|_| {
             assert_eq!(
-                rng.0.range(u32::MIN..u32::MAX),
-                rng.1.range(u32::MIN..u32::MAX),
+                rng.0.u32_in_range(u32::MIN..u32::MAX),
+                rng.1.u32_in_range(u32::MIN..u32::MAX),
             );
         });
     }
