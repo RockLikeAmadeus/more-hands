@@ -18,7 +18,19 @@ impl RandomNumberGenerator {
         }
     }
 
-    pub fn u32_in_range(&mut self, range: Range<u32>) -> u32 {
+    // pub fn u32_in_range(&mut self, range: Range<u32>) -> u32 {
+    //     self.rng.gen_range(range)
+    // }
+
+    pub fn next<T>(&mut self) -> T
+        where rand::distributions::Standard: rand::prelude::Distribution<T>
+    {
+        self.rng.r#gen()
+    }
+
+    pub fn val_in_range<T>(&mut self, range: Range<T>) -> T
+        where T: rand::distributions::uniform::SampleUniform + PartialOrd,
+    {
         self.rng.gen_range(range)
     }
 }
@@ -38,7 +50,7 @@ mod tests {
         let mut rng = RandomNumberGenerator::new();
         for _ in 10..1000 {
             let (min, max) = (1, 10);
-            let n = rng.u32_in_range(min..max);
+            let n = rng.val_in_range(min..max);
             assert!(n >= min);
             assert!(n < max);
         }
@@ -52,9 +64,16 @@ mod tests {
         );
         (0..1000).for_each(|_| {
             assert_eq!(
-                rng.0.u32_in_range(u32::MIN..u32::MAX),
-                rng.1.u32_in_range(u32::MIN..u32::MAX),
+                rng.0.val_in_range(u32::MIN..u32::MAX),
+                rng.1.val_in_range(u32::MIN..u32::MAX),
             );
         });
+    }
+
+    #[test]
+    fn test_next_types() {
+        let mut rng = RandomNumberGenerator::new();
+        let _ : i32 = rng.next();
+        let _ = rng.next::<f32>();
     }
 }

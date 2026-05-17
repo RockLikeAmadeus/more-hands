@@ -124,7 +124,7 @@ fn player(
         ui.label(&format!("Score for this hand: {hand_score}"));
 
         if ui.button("Roll Dice").clicked() {
-            let new_roll = rng.0.u32_in_range(1..7);
+            let new_roll = rng.0.val_in_range(1..7);
             if new_roll == 1 {
                 // End turn!
                 clear_die(&hand_query, &mut commands);
@@ -165,7 +165,7 @@ fn cpu(
         let hand_total: usize
             = hand_query.iter().map(|(_, ts)| ts.texture_atlas.as_ref().unwrap().index + 1).sum();
         if hand_total < 20 && scores.cpu + hand_total < 100 {
-            let new_roll = rng.0.u32_in_range(1..7);
+            let new_roll = rng.0.val_in_range(1..7);
             if new_roll == 1 {
                 clear_die(&hand_query, &mut commands);
                 state.set(GamePhase::Player);
