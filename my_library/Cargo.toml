@@ -5,3 +5,18 @@ edition = "2024"
 
 [dependencies]
 rand = "0.8"
+rand_pcg = { workspace = true, optional = true }
+rand_xorshift = {workspace = true, optional = true }
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports" ]}
+
+[[bench]]
+name = "random"
+harness = false
+
+[features]
+# default = [ "xorshift" ]
+default = [ "pcg" ]
+pcg = [ "rand_pcg" ]
+xorshift = [ "rand_xorshift" ]

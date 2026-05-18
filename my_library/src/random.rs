@@ -1,20 +1,33 @@
-use rand::{prelude::StdRng, Rng, SeedableRng};
+use rand::{
+    prelude::StdRng,
+    Rng,
+    SeedableRng,
+    distributions::uniform::{SampleRange, SampleUniform}};
 use std::ops::Range;
 
+#[cfg(all(not(feature = "pcg"), not(feature = "xorshift")))]
+type RngCore = rand::prelude::StdRng;
+
+#[cfg(feature = "pcg")]
+type RngCore = rand_pcg::Pcg64Mcg;
+
+#[cfg(feature = "xorshift")]
+type RngCore = rand_xorshift::XorShiftRng;
+
 pub struct RandomNumberGenerator {
-    rng: StdRng,
+    rng: RngCore,
 }
 
 impl RandomNumberGenerator {
     pub fn new() -> Self {
         Self {
-            rng: StdRng::from_entropy(),
+            rng: RngCore::from_entropy(),
         }
     }
 
     pub fn seeded(seed: u64) -> Self {
         Self {
-            rng: StdRng::seed_from_u64(seed)
+            rng: RngCore::seed_from_u64(seed)
         }
     }
 
@@ -28,7 +41,7 @@ impl RandomNumberGenerator {
         self.rng.r#gen()
     }
 
-    pub fn val_in_range<T>(&mut self, range: Range<T>) -> T
+    pub fn val_in_range<T>(&mut self, range: impl SampleRange<T>) -> T
         where T: rand::distributions::uniform::SampleUniform + PartialOrd,
     {
         self.rng.gen_range(range)
@@ -75,5 +88,16 @@ mod tests {
         let mut rng = RandomNumberGenerator::new();
         let _ : i32 = rng.next();
         let _ = rng.next::<f32>();
+    }
+
+    #[test]
+    fn test_float() {
+        let mut rng = RandomNumberGenerator::new();
+        for _ in 0..1000 {
+            let n = rng.val_in_range(-5000.0f32..5000.0f32);
+            assert!(n.is_finite());
+            assert!(n > -5000.0);
+            assert!(n < 5000.0);
+        }
     }
 }

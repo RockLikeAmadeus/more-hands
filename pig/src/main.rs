@@ -134,7 +134,7 @@ fn player(
                     &hand_query,
                     &mut commands,
                     &assets,
-                    new_roll as usize,
+                    new_roll,
                     Color::WHITE,
                 );
             }
@@ -165,7 +165,7 @@ fn cpu(
         let hand_total: usize
             = hand_query.iter().map(|(_, ts)| ts.texture_atlas.as_ref().unwrap().index + 1).sum();
         if hand_total < 20 && scores.cpu + hand_total < 100 {
-            let new_roll = rng.0.val_in_range(1..7);
+            let new_roll = rng.0.val_in_range(1..=6);
             if new_roll == 1 {
                 clear_die(&hand_query, &mut commands);
                 state.set(GamePhase::Player);

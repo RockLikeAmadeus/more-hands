@@ -9,3 +9,5 @@ edition = "2024"
 [workspace.dependencies]
 bevy = "0.18.1"
 bevy_egui = "0.39.1"
+rand_pcg = "0.3"
+rand_xorshift = "0.3.0"
