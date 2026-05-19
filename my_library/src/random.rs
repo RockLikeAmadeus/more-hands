@@ -1,3 +1,4 @@
+use bevy::ecs::resource::Resource;
 use rand::{
     prelude::StdRng,
     Rng,
@@ -14,6 +15,7 @@ type RngCore = rand_pcg::Pcg64Mcg;
 #[cfg(feature = "xorshift")]
 type RngCore = rand_xorshift::XorShiftRng;
 
+#[derive(bevy::prelude::Resource)]
 pub struct RandomNumberGenerator {
     rng: RngCore,
 }
@@ -51,6 +53,14 @@ impl RandomNumberGenerator {
 impl Default for RandomNumberGenerator {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+pub struct RandomPlugin;
+
+impl bevy::prelude::Plugin for RandomPlugin {
+    fn build(&self, app: &mut bevy::prelude::App) {
+        app.insert_resource(RandomNumberGenerator::new());
     }
 }
 
